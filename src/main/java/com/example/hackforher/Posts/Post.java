@@ -38,4 +38,9 @@ public class Post {
         isAnonymous=request.isAnonymous();
         date=new Date();
     }
+    public void merge(PostRequest request){
+            title=request.getTitle();
+            description=request.getDescription();
+            isAnonymous=request.isAnonymous();
+    }
 }

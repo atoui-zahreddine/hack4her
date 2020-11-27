@@ -40,4 +40,9 @@ public class PostController {
         return postService.removePostById(UUID.fromString(id),user.getId());
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updatePost(@PathVariable String id,@RequestBody PostRequest request,@AuthenticationPrincipal User user){
+        return postService.updatePostById(UUID.fromString(id),user.getId(),request);
+    }
+
 }

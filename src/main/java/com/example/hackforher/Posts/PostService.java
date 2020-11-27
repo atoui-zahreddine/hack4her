@@ -29,9 +29,14 @@ public class PostService {
         return new ResponseEntity(postRepository.getAllPostsSorted(),HttpStatus.OK);
     }
     public ResponseEntity<?> getPostById(UUID postId){
+        Post post = getPost(postId);
+        return new ResponseEntity<>(post,HttpStatus.OK);
+    }
+
+    private Post getPost(UUID postId) {
         var post=postRepository.findById(postId)
                 .orElseThrow(()-> new NotFoundException(HttpStatus.NOT_FOUND.value(), "no post with this id ."));
-        return new ResponseEntity<>(post,HttpStatus.OK);
+        return post;
     }
 
     public ResponseEntity<?> removePostById(UUID postId,UUID userId){
@@ -41,4 +46,11 @@ public class PostService {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    public ResponseEntity<?> updatePostById(UUID postId, UUID userId,PostRequest request){
+        var post =postRepository.getUserPostById(postId,userId).
+                orElseThrow(() -> new NotFoundException(HttpStatus.NOT_FOUND.value(), "you have no post with this id"));
+        post.merge(request);
+        postRepository.save(post);
+        return new ResponseEntity<>(post,HttpStatus.OK);
+    }
 }
