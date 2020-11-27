@@ -29,20 +29,16 @@ import java.util.Optional;
 @Service
 public class UserService implements UserDetailsService {
 
+    @Autowired
     private UserRepository userRepository;
+    @Autowired
     private AuthenticationManager authenticationManager;
+    @Autowired
     private JwtUtils jwtUtils;
     @Value("${auth.expiration}")
     private String tokenExpiration;
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
-
-    @Autowired
-    public UserService(UserRepository userRepository, AuthenticationManager authenticationManager, JwtUtils jwtUtils) {
-        this.userRepository = userRepository;
-        this.authenticationManager = authenticationManager;
-        this.jwtUtils = jwtUtils;
-    }
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {

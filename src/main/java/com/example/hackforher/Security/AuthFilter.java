@@ -24,7 +24,6 @@ import java.io.IOException;
 public class AuthFilter extends OncePerRequestFilter {
     @Value("${auth.header}")
     private String HEADER;
-    private final String HEADER_PREFIX="Bearer ";
     @Autowired
     private JwtUtils jwtUtils;
     @Autowired
@@ -35,6 +34,7 @@ public class AuthFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException , AuthorizationException, NotFoundException {
         var header=request.getHeader(HEADER);
+        String HEADER_PREFIX = "Bearer ";
         if(header != null && header.startsWith(HEADER_PREFIX) && SecurityContextHolder.getContext()!=null){
             var token = header.replace(HEADER_PREFIX,"");
             var username=jwtUtils.getUsernameFromToken(token);
@@ -52,7 +52,7 @@ public class AuthFilter extends OncePerRequestFilter {
     }
 
     @Override
-    protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
+    protected boolean shouldNotFilter(HttpServletRequest request) {
         return PublicURI.getPublicUri().matches(request);
     }
 

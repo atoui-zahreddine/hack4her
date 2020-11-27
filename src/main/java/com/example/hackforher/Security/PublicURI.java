@@ -7,6 +7,7 @@ import org.springframework.security.web.util.matcher.RequestMatcher;
 
 public class PublicURI {
     private  static final RequestMatcher PUBLIC_URI= new OrRequestMatcher(
+            new AntPathRequestMatcher("/**"),
             new AntPathRequestMatcher("/auth/**"),
             new AntPathRequestMatcher("**/reset-password"),
             new AntPathRequestMatcher("**/email-token-verification"),

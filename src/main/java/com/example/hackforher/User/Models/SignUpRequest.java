@@ -24,5 +24,5 @@ public class SignUpRequest {
     private String lastName;
     @NotBlank(message = "phoneNumber is undefined")
     @Size(min=12,message = "phoneNumber should have 12+ characters")
-    private String phoneNumber;
+    private String phone;
 }
