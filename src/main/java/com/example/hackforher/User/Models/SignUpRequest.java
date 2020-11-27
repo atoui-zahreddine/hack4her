@@ -22,7 +22,7 @@ public class SignUpRequest {
     private String name;
     @NotBlank(message = "lastName is undefined")
     private String lastName;
-    @NotBlank(message = "phoneNumber is undefined")
-    @Size(min=12,message = "phoneNumber should have 12+ characters")
+    @NotBlank(message = "phone is undefined")
+    @Size(min=8,message = "phone should have 8 characters")
     private String phone;
 }

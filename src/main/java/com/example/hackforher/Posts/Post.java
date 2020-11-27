@@ -1,6 +1,8 @@
 package com.example.hackforher.Posts;
 
+import com.example.hackforher.Posts.Models.PostRequest;
 import com.example.hackforher.User.User;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,10 +25,17 @@ public class Post {
     private String title;
     private String description;
     private boolean isAnonymous;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date date;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnore
     private User user;
 
+    public Post(PostRequest request) {
+        title=request.getTitle();
+        description=request.getDescription();
+        isAnonymous=request.isAnonymous();
+        date=new Date();
+    }
 }

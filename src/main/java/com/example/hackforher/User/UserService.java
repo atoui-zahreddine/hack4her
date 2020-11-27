@@ -61,10 +61,11 @@ public class UserService implements UserDetailsService {
             throw new BadCredentialsException(152,"bad credentials");
         }
         SecurityContextHolder.getContext().setAuthentication(authentication);
-
-        Map<String,String> responseData=new HashMap<>();
-        responseData.put("token", jwtUtils.generateToken((User)authentication.getPrincipal()));
+        var user =(User)authentication.getPrincipal();
+        Map<String,Object> responseData=new HashMap<>();
+        responseData.put("token", jwtUtils.generateToken(user));
         responseData.put("expiresIn",tokenExpiration);
+        responseData.put("user",user);
         var response=new ApiResponse<>(Status.SUCCESS,responseData);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }

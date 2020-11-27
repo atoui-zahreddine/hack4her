@@ -23,7 +23,7 @@ public class User  implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Type(type="uuid-char")
-    private UUID Id;
+    private UUID id;
     private String name;
     private String lastName;
     private String email;
