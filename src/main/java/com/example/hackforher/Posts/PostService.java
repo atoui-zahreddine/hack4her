@@ -3,6 +3,7 @@ package com.example.hackforher.Posts;
 import com.example.hackforher.Exception.NotFoundException;
 import com.example.hackforher.Posts.Models.PostRequest;
 import com.example.hackforher.User.User;
+import com.example.hackforher.User.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,10 +15,12 @@ import java.util.UUID;
 public class PostService {
 
     private final PostRepository postRepository;
+    private final UserRepository userRepository;
 
     @Autowired
-    public PostService(PostRepository postRepository) {
+    public PostService(PostRepository postRepository, UserRepository userRepository) {
         this.postRepository = postRepository;
+        this.userRepository = userRepository;
     }
 
     public ResponseEntity<?> createPost(PostRequest request) {
@@ -59,7 +62,12 @@ public class PostService {
         var post =postRepository.findById(postId).
                 orElseThrow(() -> new NotFoundException(HttpStatus.NOT_FOUND.value(), " no post with this id"));
         post.getUsersFavoritePosts().add(user);
+        user.getFavoritePosts().add(post);
         postRepository.save(post);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    public ResponseEntity<?> getFavoritePosts(User user) {
+        return new ResponseEntity<>(user.getFavoritePosts(),HttpStatus.OK);
     }
 }

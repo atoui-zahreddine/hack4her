@@ -50,4 +50,9 @@ public class PostController {
         return postService.addFavoritePost(UUID.fromString(id),user);
     }
 
+    @GetMapping("/favorites")
+    public ResponseEntity<?> getFavoritePosts(@AuthenticationPrincipal User user){
+        return postService.getFavoritePosts(user);
+    }
+
 }

@@ -47,6 +47,7 @@ public class User  implements UserDetails {
     public User(SignUpRequest signUpRequest) {
         this.password=signUpRequest.getPassword();
         this.username=signUpRequest.getUsername();
+        this.phone=signUpRequest.getPhone();
         this.avatar=getAvatar();
     }
 
@@ -104,7 +105,7 @@ public class User  implements UserDetails {
     public String getAvatar() {
         return (name!=null && lastName!=null) ?
                 "https://avatar.oxro.io/avatar.svg?name="+name.toUpperCase()+"+"+lastName.toUpperCase()+"&background=6ab04c&color=000"
-                :"";
+                :"https://avatar.oxro.io/avatar.svg?name="+username.toUpperCase()+"&background=6ab04c&color=000";
     }
 
     public void merge(User user) {
