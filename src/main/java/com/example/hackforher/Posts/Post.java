@@ -5,6 +5,7 @@ import com.example.hackforher.Posts.Models.PostRequest;
 import com.example.hackforher.User.User;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -31,7 +32,7 @@ public class Post {
     private Date date;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JsonIgnore
+    @JsonIgnoreProperties({"birthDate","phone"})
     private User user;
 
     @ManyToMany(mappedBy = "favoritePosts",cascade = {CascadeType.MERGE, CascadeType.PERSIST})

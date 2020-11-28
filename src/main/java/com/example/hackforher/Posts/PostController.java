@@ -21,8 +21,8 @@ public class PostController {
     }
 
     @PostMapping({"/",""})
-    public ResponseEntity<?> createPost(@Valid @RequestBody PostRequest request){
-        return postService.createPost(request);
+    public ResponseEntity<?> createPost(@Valid @RequestBody PostRequest request,@AuthenticationPrincipal User user){
+        return postService.createPost(request,user);
     }
 
     @GetMapping("")

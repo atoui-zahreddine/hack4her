@@ -1,5 +1,6 @@
 package com.example.hackforher.Jobs;
 
+import com.example.hackforher.User.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +16,8 @@ public class JobService {
     }
 
 
-    public ResponseEntity<?> createJob(Job request) {
+    public ResponseEntity<?> createJob(Job request, User user) {
+        request.setUser(user);
         return new ResponseEntity<>(jobRepository.save(request), HttpStatus.CREATED);
     }
 

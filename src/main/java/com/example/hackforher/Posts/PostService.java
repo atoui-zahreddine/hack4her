@@ -28,10 +28,11 @@ public class PostService {
         this.likePostRepository = likePostRepository;
     }
 
-    public ResponseEntity<?> createPost(PostRequest request) {
+    public ResponseEntity<?> createPost(PostRequest request,User user) {
         var newPost=new Post(request);
+        newPost.setUser(user);
         postRepository.save(newPost);
-        return new ResponseEntity<>(postRepository.save(newPost), HttpStatus.OK);
+        return new ResponseEntity<>(newPost, HttpStatus.OK);
     }
 
     public ResponseEntity<?> getAllPosts(){
