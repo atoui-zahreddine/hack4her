@@ -96,6 +96,9 @@ public class UserService implements UserDetailsService {
     }
 
     public ResponseEntity<?> getUserByID(UUID userId) {
-        return new ResponseEntity<>(userRepository.findById(userId),HttpStatus.OK);
+        var user=userRepository.findById(userId)
+                .orElseThrow(()->new NotFoundException(404,"no user with this id"));
+
+        return new ResponseEntity<>(user,HttpStatus.OK);
     }
 }
