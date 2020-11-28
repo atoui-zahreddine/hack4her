@@ -12,4 +12,8 @@ import java.util.UUID;
 public interface UserRepository  extends JpaRepository<User, UUID> {
     @Query("select u from User u  where u.email=:email")
     Optional<User> getUserByEmail(@Param("email") String email);
+
+
+    @Query("select u from User u  where u.username=:username")
+    Optional<User> getUserByUsername(@Param("username") String username);
 }

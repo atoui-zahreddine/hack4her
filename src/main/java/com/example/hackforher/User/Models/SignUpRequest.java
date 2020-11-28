@@ -18,11 +18,6 @@ public class SignUpRequest {
     @NotBlank(message="password field is undefined or blank")
     @Size(min = 8,message = "please add a password with 8+ characters")
     private String password;
-    @NotBlank(message = "name is undefined")
-    private String name;
-    @NotBlank(message = "lastName is undefined")
-    private String lastName;
-    @NotBlank(message = "phone is undefined")
-    @Size(min=8,message = "phone should have 8 characters")
-    private String phone;
+    @NotBlank(message = "username is undefined")
+    private String username;
 }

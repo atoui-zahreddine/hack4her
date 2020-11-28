@@ -1,6 +1,5 @@
 package com.example.hackforher.User;
 
-import com.example.hackforher.User.Models.SignUpRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -20,7 +19,7 @@ public class UserController {
     }
 
     @PutMapping({"/me","/me/"})
-    public ResponseEntity<?> updateUser(@RequestBody SignUpRequest request, @AuthenticationPrincipal User user){
+    public ResponseEntity<?> updateUser(@RequestBody User request, @AuthenticationPrincipal User user){
         return userService.updateUser(request,user);
     }
 }

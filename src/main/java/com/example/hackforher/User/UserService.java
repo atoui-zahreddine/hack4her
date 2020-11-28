@@ -66,9 +66,12 @@ public class UserService implements UserDetailsService {
     }
     public ResponseEntity<?> createUser(SignUpRequest signUpRequest) {
 
-        if(userRepository.getUserByEmail(signUpRequest.getEmail()).isPresent()){
-            throw new ResourceExistException(115,"email already exist !");
-        }
+        if(userRepository.getUserByEmail(signUpRequest.getEmail()).isPresent())
+            throw  new ResourceExistException(115,"email already exist !");
+
+        if(userRepository.getUserByUsername(signUpRequest.getUsername()).isPresent())
+            throw new ResourceExistException(115,"username already exist !");
+
         signUpRequest.setPassword(passwordEncoder.encode(signUpRequest.getPassword()));
         var user =new User(signUpRequest);
         user =userRepository.save(user);
@@ -84,7 +87,7 @@ public class UserService implements UserDetailsService {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    public ResponseEntity<?> updateUser(SignUpRequest newUser,User user) {
+    public ResponseEntity<?> updateUser(User newUser,User user) {
         user.merge(newUser);
         userRepository.save(user);
         return new ResponseEntity<>(user,HttpStatus.OK);

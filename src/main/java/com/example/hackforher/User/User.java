@@ -25,13 +25,14 @@ public class User  implements UserDetails {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Type(type="uuid-char")
     private UUID id;
+    private String username;
     private String name;
     private String lastName;
     private String email;
     private String avatar;
     @JsonIgnore
     private String password;
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "dd/MM/yyyy")
     private Date birthDate;
     private String phone;
 
@@ -46,11 +47,9 @@ public class User  implements UserDetails {
 
     public User(SignUpRequest signUpRequest) {
         this.email=signUpRequest.getEmail();
-        this.name=signUpRequest.getName();
-        this.lastName=signUpRequest.getLastName();
-        this.phone=signUpRequest.getPhone();
         this.password=signUpRequest.getPassword();
-        this.avatar="https://avatar.oxro.io/avatar.svg?name="+name.toUpperCase()+"+"+lastName.toUpperCase()+"&background=6ab04c&color=000";
+        this.username=signUpRequest.getUsername();
+        this.avatar=getAvatar();
     }
 
     @Override
@@ -68,7 +67,7 @@ public class User  implements UserDetails {
     @Override
     @JsonIgnore
     public String getUsername() {
-        return email;
+        return username;
     }
 
     @Override
@@ -95,11 +94,17 @@ public class User  implements UserDetails {
         return true;
     }
 
-    public void merge(SignUpRequest newUser) {
-        this.email=newUser.getEmail();
-        this.name=newUser.getName();
-        this.lastName=newUser.getLastName();
-        this.phone=newUser.getPhone();
-        this.password=newUser.getPassword();
+    public String getAvatar() {
+        return (name!=null && lastName!=null) ?
+                "https://avatar.oxro.io/avatar.svg?name="+name.toUpperCase()+"+"+lastName.toUpperCase()+"&background=6ab04c&color=000"
+                :"";
+    }
+
+    public void merge(User user) {
+        name=user.name;
+        lastName=user.lastName;
+        avatar=getAvatar();
+        birthDate=user.birthDate;
+        phone=user.phone;
     }
 }
