@@ -24,7 +24,7 @@ public interface PostRepository extends JpaRepository<Post, UUID> {
     @Query("select count (p.id) from Post p where p.user.id=:userId and p.id=:postId")
     int checkIfPostExist(@Param("postId") UUID postId,@Param("userId") UUID userId);
 
-    @Query("select p.id from Post p where p.user.id=:userId and p.id=:postId")
+    @Query("select p from Post p where p.user.id=:userId and p.id=:postId")
     Optional<Post> getUserPostById(@Param("postId") UUID postId,@Param("userId") UUID userId);
 
     @Query(nativeQuery = true,value = "Insert into user_favorite_posts values (:userId,:postId)")

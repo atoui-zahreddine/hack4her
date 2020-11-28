@@ -60,6 +60,11 @@ public class PostController {
         return postService.likePost(id,user);
     }
 
+    @GetMapping("/likes/{id}")
+    public ResponseEntity<?> getPostLikes(@PathVariable String id){
+        return postService.getPostLikes(id);
+    }
+
     @PostMapping("/reply/{id}")
     public ResponseEntity<?> replyPost(@PathVariable String id){
         return null;

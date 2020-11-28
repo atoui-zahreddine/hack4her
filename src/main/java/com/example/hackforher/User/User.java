@@ -1,6 +1,7 @@
 package com.example.hackforher.User;
 
 import com.example.hackforher.Jobs.Job;
+import com.example.hackforher.Posts.LikePost.LikePost;
 import com.example.hackforher.Posts.Post;
 import com.example.hackforher.Quotes.Quote;
 import com.example.hackforher.User.Models.SignUpRequest;
@@ -31,26 +32,14 @@ public class User  implements UserDetails {
     private String username;
     private String name;
 
-    public String getName() {
-        return name!=null?name:"";
-    }
-
-    public String getLastName() {
-        return lastName!=null?name:"";
-    }
-
-    public Date getBirthDate() {
-        return birthDate;
-    }
-
     private String lastName;
+
     private String avatar;
     @JsonIgnore
     private String password;
     @JsonFormat(pattern = "dd/MM/yyyy")
     private Date birthDate;
     private String phone;
-
 
     @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
     @JsonIgnore
@@ -80,15 +69,9 @@ public class User  implements UserDetails {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Set<Quote> favoriteQuotes=new HashSet<>();
 
-    @ManyToMany(cascade = {CascadeType.PERSIST,CascadeType.MERGE})
-    @JoinTable(
-            name = "post_likes",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "post_id")
-    )
+    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
     @JsonIgnore
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    private Set<Post> likedPosts =new HashSet<>();
+    private List<LikePost> userLikedPosts=new ArrayList<>();
 
     public User(SignUpRequest signUpRequest) {
         this.password=signUpRequest.getPassword();
@@ -101,6 +84,18 @@ public class User  implements UserDetails {
     @JsonIgnore
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return null;
+    }
+
+    public String getName() {
+        return name!=null?name:"";
+    }
+
+    public String getLastName() {
+        return lastName!=null?name:"";
+    }
+
+    public Date getBirthDate() {
+        return birthDate;
     }
 
     @Override

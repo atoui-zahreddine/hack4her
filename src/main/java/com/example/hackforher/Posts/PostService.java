@@ -1,6 +1,9 @@
 package com.example.hackforher.Posts;
 
 import com.example.hackforher.Exception.NotFoundException;
+import com.example.hackforher.Exception.ResourceExistException;
+import com.example.hackforher.Posts.LikePost.LikePost;
+import com.example.hackforher.Posts.LikePost.LikePostRepository;
 import com.example.hackforher.Posts.Models.PostRequest;
 import com.example.hackforher.User.User;
 import com.example.hackforher.User.UserRepository;
@@ -16,11 +19,13 @@ public class PostService {
 
     private final PostRepository postRepository;
     private final UserRepository userRepository;
+    private final LikePostRepository likePostRepository;
 
     @Autowired
-    public PostService(PostRepository postRepository, UserRepository userRepository) {
+    public PostService(PostRepository postRepository, UserRepository userRepository, LikePostRepository likePostRepository) {
         this.postRepository = postRepository;
         this.userRepository = userRepository;
+        this.likePostRepository = likePostRepository;
     }
 
     public ResponseEntity<?> createPost(PostRequest request) {
@@ -61,6 +66,9 @@ public class PostService {
     public ResponseEntity<?> addFavoritePost(UUID postId, User user) {
         var post =postRepository.findById(postId).
                 orElseThrow(() -> new NotFoundException(HttpStatus.NOT_FOUND.value(), " no post with this id"));
+        var alreadyAdded=user.getFavoritePosts().stream().anyMatch(p->p.getId().equals(postId));
+        if(alreadyAdded)
+            throw new ResourceExistException(HttpStatus.CONFLICT.value(), "already added to favorites");
         post.getUsersFavoritePosts().add(user);
         user.getFavoritePosts().add(post);
         postRepository.save(post);
@@ -73,11 +81,28 @@ public class PostService {
 
     public ResponseEntity<?> likePost(String id, User user) {
         var post =getPost(UUID.fromString(id));
-        user.getLikedPosts().add(post);
-        post.getUsersLikes().add(user);
+        var alreadyLiked = likePostRepository.isAlreadyLiked(UUID.fromString(id),user.getId());
+        if(alreadyLiked>0)
+            throw new ResourceExistException(HttpStatus.CONFLICT.value(),
+                    "already liked");
+        var likePost=new LikePost();
+        likePost.setPost(post);
+        likePost.setUser(user);
 
-        postRepository.save(post);
+        likePostRepository.save(likePost);
 
-        return new ResponseEntity<>(post.getUsersLikes(),HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    public ResponseEntity<?> getPostLikes(String id) {
+        if(!postRepository.existsById(UUID.fromString(id)))
+            throw new NotFoundException(HttpStatus.NOT_FOUND.value()
+                    , "no post with this id");
+        var postLikes=likePostRepository
+                .getPostLikes(UUID.fromString(id))
+                .stream()
+                .map(l -> new PostLikesResponse(l.getId(),l.getUser().getName(),
+                        l.getUser().getLastName(),l.getUser().getUsername()));
+        return new ResponseEntity<>(postLikes,HttpStatus.OK);
     }
 }

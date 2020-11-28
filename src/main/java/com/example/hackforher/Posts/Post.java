@@ -1,5 +1,6 @@
 package com.example.hackforher.Posts;
 
+import com.example.hackforher.Posts.LikePost.LikePost;
 import com.example.hackforher.Posts.Models.PostRequest;
 import com.example.hackforher.User.User;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -12,10 +13,7 @@ import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 @Entity
 @NoArgsConstructor
@@ -41,10 +39,9 @@ public class Post {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Set<User> usersFavoritePosts=new HashSet<>();
 
-    @ManyToMany(mappedBy = "likedPosts",cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @OneToMany(mappedBy = "post",cascade = CascadeType.ALL)
     @JsonIgnore
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    private Set<User> usersLikes=new HashSet<>();
+    private List<LikePost> usersLikes=new ArrayList<>();
 
     public Post(PostRequest request) {
         title=request.getTitle();
