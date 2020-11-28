@@ -11,6 +11,8 @@ import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 @Entity
@@ -31,6 +33,10 @@ public class Post {
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnore
     private User user;
+
+    @ManyToMany(mappedBy = "favoritePosts",cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @JsonIgnore
+    private Set<User> usersFavoritePosts=new HashSet<>();
 
     public Post(PostRequest request) {
         title=request.getTitle();

@@ -2,6 +2,7 @@ package com.example.hackforher.Posts;
 
 import com.example.hackforher.Exception.NotFoundException;
 import com.example.hackforher.Posts.Models.PostRequest;
+import com.example.hackforher.User.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -52,5 +53,13 @@ public class PostService {
         post.merge(request);
         postRepository.save(post);
         return new ResponseEntity<>(post,HttpStatus.OK);
+    }
+
+    public ResponseEntity<?> addFavoritePost(UUID postId, User user) {
+        var post =postRepository.findById(postId).
+                orElseThrow(() -> new NotFoundException(HttpStatus.NOT_FOUND.value(), " no post with this id"));
+        post.getUsersFavoritePosts().add(user);
+        postRepository.save(post);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

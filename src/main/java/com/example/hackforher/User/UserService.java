@@ -41,11 +41,11 @@ public class UserService implements UserDetailsService {
     private BCryptPasswordEncoder passwordEncoder;
 
     @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        Optional<User> user=userRepository.getUserByEmail(email);
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        Optional<User> user=userRepository.getUserByUsername(username);
 
         if(!user.isPresent())
-            throw new NotFoundException(150,"no user with this email= "+email);
+            throw new NotFoundException(150,"no user with this username= "+username);
 
         return user.get();
     }
@@ -54,7 +54,7 @@ public class UserService implements UserDetailsService {
         Authentication authentication;
         try{
             authentication=authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(request.getEmail(),request.getPassword())
+                    new UsernamePasswordAuthenticationToken(request.getUsername(),request.getPassword())
             );
         }
         catch (org.springframework.security.authentication.BadCredentialsException ex){
@@ -66,11 +66,12 @@ public class UserService implements UserDetailsService {
     }
     public ResponseEntity<?> createUser(SignUpRequest signUpRequest) {
 
-        if(userRepository.getUserByEmail(signUpRequest.getEmail()).isPresent())
-            throw  new ResourceExistException(115,"email already exist !");
-
-        if(userRepository.getUserByUsername(signUpRequest.getUsername()).isPresent())
+        if(userRepository.getUserByUsername(signUpRequest.getUsername()).isPresent()) {
             throw new ResourceExistException(115,"username already exist !");
+        }
+
+        if(userRepository.getUserByPhone(signUpRequest.getPhone()).isPresent())
+            throw  new ResourceExistException(116,"phone already exist !");
 
         signUpRequest.setPassword(passwordEncoder.encode(signUpRequest.getPassword()));
         var user =new User(signUpRequest);

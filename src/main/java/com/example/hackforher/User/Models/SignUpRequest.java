@@ -4,7 +4,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
@@ -12,9 +11,8 @@ import javax.validation.constraints.Size;
 @Setter
 @NoArgsConstructor
 public class SignUpRequest {
-    @Email(message = "invalid email address")
-    @NotBlank(message = "email field is undefined or blank ")
-    private String email;
+    @NotBlank(message = "phone field is undefined or blank ")
+    private String phone;
     @NotBlank(message="password field is undefined or blank")
     @Size(min = 8,message = "please add a password with 8+ characters")
     private String password;

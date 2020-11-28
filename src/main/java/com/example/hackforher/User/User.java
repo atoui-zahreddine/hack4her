@@ -28,7 +28,6 @@ public class User  implements UserDetails {
     private String username;
     private String name;
     private String lastName;
-    private String email;
     private String avatar;
     @JsonIgnore
     private String password;
@@ -46,11 +45,18 @@ public class User  implements UserDetails {
     private List<Job> jobs=new ArrayList<>();
 
     public User(SignUpRequest signUpRequest) {
-        this.email=signUpRequest.getEmail();
         this.password=signUpRequest.getPassword();
         this.username=signUpRequest.getUsername();
         this.avatar=getAvatar();
     }
+
+    @ManyToMany(cascade= {CascadeType.PERSIST,CascadeType.MERGE})
+    @JoinTable(
+            name = "user_favorite_posts",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "post_id")
+    )
+    private Set<Post> favoritePosts=new HashSet<>();
 
     @Override
     @JsonIgnore
