@@ -51,6 +51,7 @@ public class User  implements UserDetails {
     }
 
     @ManyToMany(cascade= {CascadeType.PERSIST,CascadeType.MERGE})
+    @JsonIgnore
     @JoinTable(
             name = "user_favorite_posts",
             joinColumns = @JoinColumn(name = "user_id"),
