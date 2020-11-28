@@ -62,12 +62,7 @@ public class UserService implements UserDetailsService {
         }
         SecurityContextHolder.getContext().setAuthentication(authentication);
         var user =(User)authentication.getPrincipal();
-        Map<String,Object> responseData=new HashMap<>();
-        responseData.put("token", jwtUtils.generateToken(user));
-        responseData.put("expiresIn",tokenExpiration);
-        responseData.put("user",user);
-        var response=new ApiResponse<>(Status.SUCCESS,responseData);
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return fillResponseWithUserData(user);
     }
     public ResponseEntity<?> createUser(SignUpRequest signUpRequest) {
 
@@ -77,7 +72,15 @@ public class UserService implements UserDetailsService {
         signUpRequest.setPassword(passwordEncoder.encode(signUpRequest.getPassword()));
         var user =new User(signUpRequest);
         user =userRepository.save(user);
-        var response=new ApiResponse<>(Status.SUCCESS,user);
+        return fillResponseWithUserData(user);
+    }
+
+    private ResponseEntity<?> fillResponseWithUserData(User user) {
+        Map<String,Object> responseData=new HashMap<>();
+        responseData.put("token", jwtUtils.generateToken(user));
+        responseData.put("expiresIn",tokenExpiration);
+        responseData.put("user",user);
+        var response=new ApiResponse<>(Status.SUCCESS,responseData);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
