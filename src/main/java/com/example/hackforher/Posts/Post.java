@@ -7,6 +7,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
@@ -36,6 +38,7 @@ public class Post {
 
     @ManyToMany(mappedBy = "favoritePosts",cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JsonIgnore
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Set<User> usersFavoritePosts=new HashSet<>();
 
     public Post(PostRequest request) {

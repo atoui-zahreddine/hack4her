@@ -2,12 +2,15 @@ package com.example.hackforher.User;
 
 import com.example.hackforher.Jobs.Job;
 import com.example.hackforher.Posts.Post;
+import com.example.hackforher.Quotes.Quote;
 import com.example.hackforher.User.Models.SignUpRequest;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.annotations.Type;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -44,21 +47,33 @@ public class User  implements UserDetails {
     @JsonIgnore
     private List<Job> jobs=new ArrayList<>();
 
+    @ManyToMany(cascade= {CascadeType.PERSIST,CascadeType.MERGE})
+    @JoinTable(
+            name = "user_favorite_posts",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "post_id")
+    )
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JsonIgnore
+    private Set<Post> favoritePosts=new HashSet<>();
+
+    @ManyToMany(cascade = {CascadeType.PERSIST,CascadeType.MERGE})
+    @JoinTable(
+            name = "user_favorite_quotes",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "quote_id")
+    )
+    @JsonIgnore
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private Set<Quote> favoriteQuotes=new HashSet<>();
+
+
     public User(SignUpRequest signUpRequest) {
         this.password=signUpRequest.getPassword();
         this.username=signUpRequest.getUsername();
         this.phone=signUpRequest.getPhone();
         this.avatar=getAvatar();
     }
-
-    @ManyToMany(cascade= {CascadeType.PERSIST,CascadeType.MERGE})
-    @JsonIgnore
-    @JoinTable(
-            name = "user_favorite_posts",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "post_id")
-    )
-    private Set<Post> favoritePosts=new HashSet<>();
 
     @Override
     @JsonIgnore

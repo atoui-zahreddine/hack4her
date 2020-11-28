@@ -14,8 +14,10 @@ import java.util.UUID;
 
 @Repository()
 public interface PostRepository extends JpaRepository<Post, UUID> {
+
     @Query("select p from Post p order by p.date desc ")
     List<Post> getAllPostsSorted();
+
     @EntityGraph(attributePaths = {"usersFavoritePosts"})
     Optional<Post> findById(UUID postId);
 

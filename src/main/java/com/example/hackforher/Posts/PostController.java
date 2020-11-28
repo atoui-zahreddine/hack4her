@@ -41,7 +41,7 @@ public class PostController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updatePost(@PathVariable String id,@RequestBody PostRequest request,@AuthenticationPrincipal User user){
+    public ResponseEntity<?> updatePost(@PathVariable String id,@Valid @RequestBody PostRequest request,@AuthenticationPrincipal User user){
         return postService.updatePostById(UUID.fromString(id),user.getId(),request);
     }
 

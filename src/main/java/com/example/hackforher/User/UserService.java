@@ -25,6 +25,7 @@ import org.springframework.stereotype.Service;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class UserService implements UserDetailsService {
@@ -92,5 +93,9 @@ public class UserService implements UserDetailsService {
         user.merge(newUser);
         userRepository.save(user);
         return new ResponseEntity<>(user,HttpStatus.OK);
+    }
+
+    public ResponseEntity<?> getUserByID(UUID userId) {
+        return new ResponseEntity<>(userRepository.findById(userId),HttpStatus.OK);
     }
 }
