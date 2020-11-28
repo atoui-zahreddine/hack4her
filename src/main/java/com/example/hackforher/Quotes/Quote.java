@@ -4,6 +4,8 @@ import com.example.hackforher.User.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
@@ -25,5 +27,6 @@ public class Quote {
 
     @ManyToMany(mappedBy = "favoriteQuotes",cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JsonIgnore
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Set<User> usersFavoriteQuotes=new HashSet<>();
 }

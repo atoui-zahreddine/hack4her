@@ -70,4 +70,14 @@ public class PostService {
     public ResponseEntity<?> getFavoritePosts(User user) {
         return new ResponseEntity<>(user.getFavoritePosts(),HttpStatus.OK);
     }
+
+    public ResponseEntity<?> likePost(String id, User user) {
+        var post =getPost(UUID.fromString(id));
+        user.getLikedPosts().add(post);
+        post.getUsersLikes().add(user);
+
+        postRepository.save(post);
+
+        return new ResponseEntity<>(post.getUsersLikes(),HttpStatus.OK);
+    }
 }

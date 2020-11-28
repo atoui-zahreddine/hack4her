@@ -41,6 +41,11 @@ public class Post {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Set<User> usersFavoritePosts=new HashSet<>();
 
+    @ManyToMany(mappedBy = "likedPosts",cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @JsonIgnore
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private Set<User> usersLikes=new HashSet<>();
+
     public Post(PostRequest request) {
         title=request.getTitle();
         description=request.getDescription();

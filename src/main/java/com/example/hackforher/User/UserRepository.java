@@ -15,9 +15,9 @@ public interface UserRepository  extends JpaRepository<User, UUID> {
     @Query("select u from User u  where u.phone=:phone")
     Optional<User> getUserByPhone(@Param("phone") String phone);
 
-    @EntityGraph(attributePaths = "favoritePosts")
+    @EntityGraph(attributePaths = {"favoritePosts","favoriteQuotes"})
     Optional<User> findById(UUID userId);
-    @EntityGraph(attributePaths = "favoritePosts")
+    @EntityGraph(attributePaths = {"favoritePosts","favoriteQuotes"})
     @Query("select u from User u  where u.username=:username")
     Optional<User> getUserByUsername(@Param("username") String username);
 }

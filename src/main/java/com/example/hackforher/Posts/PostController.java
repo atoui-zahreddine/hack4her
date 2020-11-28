@@ -55,4 +55,16 @@ public class PostController {
         return postService.getFavoritePosts(user);
     }
 
+    @PostMapping("/likes/{id}")
+    public ResponseEntity<?> likePost(@PathVariable String id,@AuthenticationPrincipal User user){
+        return postService.likePost(id,user);
+    }
+
+    @PostMapping("/reply/{id}")
+    public ResponseEntity<?> replyPost(@PathVariable String id){
+        return null;
+    }
+
+
+
 }

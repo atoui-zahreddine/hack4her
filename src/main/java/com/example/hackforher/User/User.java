@@ -30,6 +30,19 @@ public class User  implements UserDetails {
     private UUID id;
     private String username;
     private String name;
+
+    public String getName() {
+        return name!=null?name:"";
+    }
+
+    public String getLastName() {
+        return lastName!=null?name:"";
+    }
+
+    public Date getBirthDate() {
+        return birthDate;
+    }
+
     private String lastName;
     private String avatar;
     @JsonIgnore
@@ -67,6 +80,15 @@ public class User  implements UserDetails {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Set<Quote> favoriteQuotes=new HashSet<>();
 
+    @ManyToMany(cascade = {CascadeType.PERSIST,CascadeType.MERGE})
+    @JoinTable(
+            name = "post_likes",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "post_id")
+    )
+    @JsonIgnore
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private Set<Post> likedPosts =new HashSet<>();
 
     public User(SignUpRequest signUpRequest) {
         this.password=signUpRequest.getPassword();
