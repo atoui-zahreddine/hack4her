@@ -3,6 +3,7 @@ package com.example.hackforher.User;
 import com.example.hackforher.Jobs.Job;
 import com.example.hackforher.Posts.Post;
 import com.example.hackforher.User.Models.SignUpRequest;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,8 +28,10 @@ public class User  implements UserDetails {
     private String name;
     private String lastName;
     private String email;
+    private String avatar;
     @JsonIgnore
     private String password;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date birthDate;
     private String phone;
 
@@ -47,6 +50,7 @@ public class User  implements UserDetails {
         this.lastName=signUpRequest.getLastName();
         this.phone=signUpRequest.getPhone();
         this.password=signUpRequest.getPassword();
+        this.avatar="https://avatar.oxro.io/avatar.svg?name="+name.toUpperCase()+"+"+lastName.toUpperCase()+"&background=6ab04c&color=000";
     }
 
     @Override
@@ -89,5 +93,13 @@ public class User  implements UserDetails {
     @JsonIgnore
     public boolean isEnabled() {
         return true;
+    }
+
+    public void merge(SignUpRequest newUser) {
+        this.email=newUser.getEmail();
+        this.name=newUser.getName();
+        this.lastName=newUser.getLastName();
+        this.phone=newUser.getPhone();
+        this.password=newUser.getPassword();
     }
 }

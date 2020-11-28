@@ -81,4 +81,9 @@ public class UserService implements UserDetailsService {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    public ResponseEntity<?> updateUser(SignUpRequest newUser,User user) {
+        user.merge(newUser);
+        userRepository.save(user);
+        return new ResponseEntity<>(user,HttpStatus.OK);
+    }
 }
