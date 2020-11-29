@@ -26,4 +26,9 @@ public class JobController {
     public ResponseEntity<?> getAllJobs(){
         return jobService.getAllJobs();
     }
+
+    @GetMapping("/latest")
+    public ResponseEntity<?> getLatestJobs(){
+        return jobService.getLatestJobs();
+    }
 }
