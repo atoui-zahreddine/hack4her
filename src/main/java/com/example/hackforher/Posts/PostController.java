@@ -1,6 +1,7 @@
 package com.example.hackforher.Posts;
 
 import com.example.hackforher.Posts.Models.PostRequest;
+import com.example.hackforher.Posts.Models.ReplyRequest;
 import com.example.hackforher.User.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -66,10 +67,12 @@ public class PostController {
     }
 
     @PostMapping("/reply/{id}")
-    public ResponseEntity<?> replyPost(@PathVariable String id){
-        return null;
+    public ResponseEntity<?> replyPost(@PathVariable String id,
+                                       @AuthenticationPrincipal User user,
+                                       @Valid @RequestBody ReplyRequest replyRequest
+                                       )
+    { return postService.addReply(UUID.fromString(id),replyRequest,user);
     }
-
 
 
 }

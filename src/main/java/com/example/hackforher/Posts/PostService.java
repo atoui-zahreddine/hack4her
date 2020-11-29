@@ -5,6 +5,9 @@ import com.example.hackforher.Exception.ResourceExistException;
 import com.example.hackforher.Posts.LikePost.LikePost;
 import com.example.hackforher.Posts.LikePost.LikePostRepository;
 import com.example.hackforher.Posts.Models.PostRequest;
+import com.example.hackforher.Posts.Models.ReplyRequest;
+import com.example.hackforher.Posts.ReplyPost.ReplyPost;
+import com.example.hackforher.Posts.ReplyPost.ReplyPostRepository;
 import com.example.hackforher.User.User;
 import com.example.hackforher.User.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,12 +23,14 @@ public class PostService {
     private final PostRepository postRepository;
     private final UserRepository userRepository;
     private final LikePostRepository likePostRepository;
+    private final ReplyPostRepository replyPostRepository;
 
     @Autowired
-    public PostService(PostRepository postRepository, UserRepository userRepository, LikePostRepository likePostRepository) {
+    public PostService(PostRepository postRepository, UserRepository userRepository, LikePostRepository likePostRepository, ReplyPostRepository replyPostRepository) {
         this.postRepository = postRepository;
         this.userRepository = userRepository;
         this.likePostRepository = likePostRepository;
+        this.replyPostRepository = replyPostRepository;
     }
 
     public ResponseEntity<?> createPost(PostRequest request,User user) {
@@ -106,4 +111,16 @@ public class PostService {
                         l.getUser().getLastName(),l.getUser().getUsername()));
         return new ResponseEntity<>(postLikes,HttpStatus.OK);
     }
+    public ResponseEntity<?> addReply(UUID postId, ReplyRequest reply,User user){
+        var post = getPost(postId);
+        var newReply=new ReplyPost();
+        newReply.setPost(post);
+        newReply.setUser(user);
+        newReply.setReply(reply.getReply());
+
+        replyPostRepository.save(newReply);
+
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
 }

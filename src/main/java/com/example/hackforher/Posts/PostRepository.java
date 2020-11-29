@@ -15,11 +15,11 @@ import java.util.UUID;
 @Repository()
 public interface PostRepository extends JpaRepository<Post, UUID> {
 
-    @Query("select p from Post p order by p.date desc ")
-    @EntityGraph(attributePaths = {"user"})
+    @Query("select p from Post p  order by p.date desc ")
+    @EntityGraph(attributePaths = {"user","postReplys"})
     List<Post> getAllPostsSorted();
 
-    @EntityGraph(attributePaths = {"usersFavoritePosts"})
+    @EntityGraph(attributePaths = {"usersFavoritePosts","user","postReplys"})
     Optional<Post> findById(UUID postId);
 
     @Query("select count (p.id) from Post p where p.user.id=:userId and p.id=:postId")
@@ -27,7 +27,7 @@ public interface PostRepository extends JpaRepository<Post, UUID> {
 
 
     @Query("select p from Post p where p.user.id=:userId and p.id=:postId")
-    @EntityGraph(attributePaths = {"user"})
+    @EntityGraph(attributePaths = {"user","postReplys"})
     Optional<Post> getUserPostById(@Param("postId") UUID postId,@Param("userId") UUID userId);
 
     @Query(nativeQuery = true,value = "Insert into user_favorite_posts values (:userId,:postId)")

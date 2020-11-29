@@ -2,6 +2,7 @@ package com.example.hackforher.Posts;
 
 import com.example.hackforher.Posts.LikePost.LikePost;
 import com.example.hackforher.Posts.Models.PostRequest;
+import com.example.hackforher.Posts.ReplyPost.ReplyPost;
 import com.example.hackforher.User.User;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -43,6 +44,9 @@ public class Post {
     @OneToMany(mappedBy = "post",cascade = CascadeType.ALL)
     @JsonIgnore
     private List<LikePost> usersLikes=new ArrayList<>();
+
+    @OneToMany(mappedBy = "post",cascade = CascadeType.ALL)
+    private List<ReplyPost> postReplys=new ArrayList<>();
 
     public Post(PostRequest request) {
         title=request.getTitle();
