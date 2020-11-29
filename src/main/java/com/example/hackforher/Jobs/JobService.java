@@ -26,6 +26,6 @@ public class JobService {
     }
 
     public ResponseEntity<?> getLatestJobs() {
-        return new ResponseEntity<>(jobRepository.getLatestJobs(),HttpStatus.OK);
+        return new ResponseEntity<>(jobRepository.findTop5ByOrderByCreationDateDesc(),HttpStatus.OK);
     }
 }
