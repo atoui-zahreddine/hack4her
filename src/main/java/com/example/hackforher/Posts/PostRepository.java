@@ -20,7 +20,7 @@ public interface PostRepository extends JpaRepository<Post, UUID> {
     @Query("select p from Post p order by p.date desc ")
     List<Post> getAllPostsSorted();
 
-    @EntityGraph(attributePaths = {"usersFavoritePosts","user","postReplys"})
+    @EntityGraph(attributePaths = {"usersFavoritePosts","user","postReplys","usersLikes"})
     Optional<Post> findById(UUID postId);
 
     @Query("select count (p.id) from Post p where p.user.id=:userId and p.id=:postId")
