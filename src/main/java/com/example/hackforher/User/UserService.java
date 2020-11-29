@@ -1,9 +1,6 @@
 package com.example.hackforher.User;
 
-import com.example.hackforher.Exception.ApiResponse;
-import com.example.hackforher.Exception.BadCredentialsException;
-import com.example.hackforher.Exception.NotFoundException;
-import com.example.hackforher.Exception.ResourceExistException;
+import com.example.hackforher.Exception.*;
 import com.example.hackforher.User.Models.SignInRequest;
 import com.example.hackforher.User.Models.SignUpRequest;
 import com.example.hackforher.Utils.Enums.Status;
@@ -89,8 +86,15 @@ public class UserService implements UserDetailsService {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    public ResponseEntity<?> updateUser(User newUser,User user) {
-        user.merge(newUser);
+    public ResponseEntity<?> updateUser(User updatedUser,User user) {
+
+        if(updatedUser.getPassword() != null ){
+            if(updatedUser.getPassword().length()<8)
+                throw new BadRequestException("password should be 8+ characters", HttpStatus.BAD_REQUEST.value());
+            updatedUser.setPassword(passwordEncoder.encode(updatedUser.getPassword()));
+        }
+
+        user.merge(updatedUser);
         userRepository.save(user);
         return new ResponseEntity<>(user,HttpStatus.OK);
     }

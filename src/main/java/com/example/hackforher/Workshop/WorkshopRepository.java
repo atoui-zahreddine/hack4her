@@ -1,4 +1,4 @@
-package com.example.hackforher.Jobs;
+package com.example.hackforher.Workshop;
 
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Repository
-public interface JobRepository extends JpaRepository<Job, UUID> {
+public interface WorkshopRepository extends JpaRepository<Workshop, UUID> {
     @EntityGraph(attributePaths = {"user"})
-    List<Job> findAll();
+    List<Workshop> findAll();
 }

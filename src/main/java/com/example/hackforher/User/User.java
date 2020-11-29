@@ -5,8 +5,10 @@ import com.example.hackforher.Posts.LikePost.LikePost;
 import com.example.hackforher.Posts.Post;
 import com.example.hackforher.Quotes.UserFavoriteQuotes.UserFavoriteQuotes;
 import com.example.hackforher.User.Models.SignUpRequest;
+import com.example.hackforher.Workshop.Workshop;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -31,11 +33,9 @@ public class User  implements UserDetails {
     private UUID id;
     private String username;
     private String name;
-
     private String lastName;
-
     private String avatar;
-    @JsonIgnore
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
     @JsonFormat(pattern = "dd/MM/yyyy")
     private Date birthDate;
@@ -48,6 +48,10 @@ public class User  implements UserDetails {
     @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
     @JsonIgnore
     private List<Job> jobs=new ArrayList<>();
+
+    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<Workshop> workshops=new ArrayList<>();
 
     @ManyToMany(cascade= {CascadeType.PERSIST,CascadeType.MERGE})
     @JoinTable(
@@ -139,5 +143,6 @@ public class User  implements UserDetails {
         avatar=getAvatar();
         birthDate=user.birthDate;
         phone=user.phone;
+        password=user.password;
     }
 }
