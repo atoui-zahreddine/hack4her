@@ -43,10 +43,10 @@ public class Post {
 
     @OneToMany(mappedBy = "post",cascade = CascadeType.ALL)
     @JsonIgnore
-    private List<LikePost> usersLikes=new ArrayList<>();
+    private Set<LikePost> usersLikes=new HashSet<>();
 
     @OneToMany(mappedBy = "post",cascade = CascadeType.ALL)
-    private List<ReplyPost> postReplys=new ArrayList<>();
+    private Set<ReplyPost> postReplys=new HashSet<>();
 
     public Post(PostRequest request) {
         title=request.getTitle();
@@ -58,5 +58,8 @@ public class Post {
             title=request.getTitle();
             description=request.getDescription();
             isAnonymous=request.isAnonymous();
+    }
+    public int getNumberOfLikes(){
+        return usersLikes.size();
     }
 }
