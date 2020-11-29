@@ -1,23 +1,22 @@
 package com.example.hackforher.Quotes;
 
-import com.example.hackforher.User.User;
+import com.example.hackforher.Quotes.UserFavoriteQuotes.UserFavoriteQuotes;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
 @Getter
 @Setter
 public class Quote {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Type(type="uuid-char")
@@ -25,8 +24,8 @@ public class Quote {
     @NotBlank
     private String description;
 
-    @ManyToMany(mappedBy = "favoriteQuotes",cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @OneToMany(mappedBy = "quote",cascade = CascadeType.ALL)
     @JsonIgnore
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    private Set<User> usersFavoriteQuotes=new HashSet<>();
+    private List<UserFavoriteQuotes> userFavoriteQuotes=new ArrayList<>();
+
 }

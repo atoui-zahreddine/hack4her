@@ -3,7 +3,7 @@ package com.example.hackforher.User;
 import com.example.hackforher.Jobs.Job;
 import com.example.hackforher.Posts.LikePost.LikePost;
 import com.example.hackforher.Posts.Post;
-import com.example.hackforher.Quotes.Quote;
+import com.example.hackforher.Quotes.UserFavoriteQuotes.UserFavoriteQuotes;
 import com.example.hackforher.User.Models.SignUpRequest;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -59,15 +59,9 @@ public class User  implements UserDetails {
     @JsonIgnore
     private Set<Post> favoritePosts=new HashSet<>();
 
-    @ManyToMany(cascade = {CascadeType.PERSIST,CascadeType.MERGE})
-    @JoinTable(
-            name = "user_favorite_quotes",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "quote_id")
-    )
+    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
     @JsonIgnore
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    private Set<Quote> favoriteQuotes=new HashSet<>();
+    private Set<UserFavoriteQuotes> favoriteQuotes=new HashSet<>();
 
     @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
     @JsonIgnore

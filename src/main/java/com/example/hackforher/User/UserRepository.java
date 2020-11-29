@@ -17,6 +17,7 @@ public interface UserRepository  extends JpaRepository<User, UUID> {
 
     @EntityGraph(attributePaths = {"favoritePosts","favoriteQuotes"})
     Optional<User> findById(UUID userId);
+
     @EntityGraph(attributePaths = {"favoritePosts","favoriteQuotes"})
     @Query("select u from User u  where u.username=:username")
     Optional<User> getUserByUsername(@Param("username") String username);

@@ -2,6 +2,8 @@ package com.example.hackforher.Quotes;
 
 import com.example.hackforher.Exception.NotFoundException;
 import com.example.hackforher.Exception.ResourceExistException;
+import com.example.hackforher.Quotes.UserFavoriteQuotes.UserFavoriteQuotes;
+import com.example.hackforher.Quotes.UserFavoriteQuotes.UserFavoriteQuotesRepository;
 import com.example.hackforher.User.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,10 +16,11 @@ import java.util.UUID;
 public class QuoteService {
 
     private final QuoteRepository quoteRepository;
-
+    private final UserFavoriteQuotesRepository userFavoriteQuotesRepository;
     @Autowired
-    public QuoteService(QuoteRepository quoteRepository) {
+    public QuoteService(QuoteRepository quoteRepository, UserFavoriteQuotesRepository userFavoriteQuotesRepository) {
         this.quoteRepository = quoteRepository;
+        this.userFavoriteQuotesRepository = userFavoriteQuotesRepository;
     }
 
     public ResponseEntity<?> createQuote(Quote quote){
@@ -46,27 +49,26 @@ public class QuoteService {
         var quote=getQuote(quoteId);
         var isAlreadyFavorite=user.getFavoriteQuotes()
                 .stream()
-                .anyMatch((q)-> q.getId().equals(quoteId));
+                .anyMatch(( q ) -> q.getQuote().getId().equals(quoteId));
 
         if(isAlreadyFavorite){
             throw new ResourceExistException(150,"already added to favorite quotes");
         }
-
-        quote.getUsersFavoriteQuotes().add(user);
-        user.getFavoriteQuotes().add(quote);
-        quoteRepository.save(quote);
+        var favoriteQuote=new UserFavoriteQuotes();
+        favoriteQuote.setUser(user);
+        favoriteQuote.setQuote(quote);
+        userFavoriteQuotesRepository.save(favoriteQuote);
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
     public ResponseEntity<?> deleteFavoriteQuote(UUID quoteId,User user){
-        if(!quoteRepository.existsById(quoteId)){
-            throw new NotFoundException(HttpStatus.NOT_FOUND.value(), "no quote with this id");
-        }
-        quoteRepository.deleteFavoritesQuote(quoteId.toString(),user.getId().toString());
+        var favoriteQuote=userFavoriteQuotesRepository.findByUserIdAndQuoteID(quoteId,user.getId());
+        userFavoriteQuotesRepository.delete(favoriteQuote.get());
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     public ResponseEntity<?> getFavoriteQuotes(User user) {
-        return new ResponseEntity<>(user.getFavoriteQuotes(),HttpStatus.OK);
+        var favoriteQuotes=userFavoriteQuotesRepository.findByUserId(user.getId());
+        return new ResponseEntity<>(favoriteQuotes,HttpStatus.OK);
     }
 }
