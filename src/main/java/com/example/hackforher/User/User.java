@@ -23,8 +23,8 @@ import java.util.*;
 
 @Entity
 @NoArgsConstructor
-@Getter
 @Setter
+@Getter
 public class User  implements UserDetails {
 
     @Id
@@ -89,7 +89,7 @@ public class User  implements UserDetails {
     }
 
     public String getLastName() {
-        return lastName!=null?name:"";
+        return lastName!=null?lastName:"";
     }
 
     public Date getBirthDate() {
@@ -130,6 +130,7 @@ public class User  implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
 
     public String getAvatar() {
         return (name!=null && lastName!=null) ?
