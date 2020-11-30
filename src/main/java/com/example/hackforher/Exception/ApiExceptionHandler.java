@@ -20,7 +20,9 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(ApiBaseException.class)
     public ResponseEntity<?> handleApiException (ApiBaseException ex , WebRequest request){
-        var response=new ApiResponse<>(Status.FAILURE,Map.of("error:",ex.getMessage()));
+        var response=new ApiResponse<>(Status.FAILURE,Map.of("error:",ex.getMessage(),
+                                                            "errorCode",ex.getErrorCode(),
+                                                            "URI",request.getDescription(false)));
         return new ResponseEntity<>(response,ex.getHttpStatus());
     }
 

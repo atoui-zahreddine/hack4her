@@ -4,7 +4,7 @@ import com.example.hackforher.Jobs.Job;
 import com.example.hackforher.Posts.LikePost.LikePost;
 import com.example.hackforher.Posts.Post;
 import com.example.hackforher.Quotes.UserFavoriteQuotes.UserFavoriteQuotes;
-import com.example.hackforher.User.Models.SignUpRequest;
+import com.example.hackforher.User.DTO.SignUpRequest;
 import com.example.hackforher.Workshop.Workshop;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -143,6 +143,8 @@ public class User  implements UserDetails {
         avatar=getAvatar();
         birthDate=user.birthDate;
         phone=user.phone;
-        password=user.password;
+        if(user.getPassword() != null){
+            password=user.getPassword();
+        }
     }
 }

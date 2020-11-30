@@ -1,7 +1,7 @@
 package com.example.hackforher.Posts;
 
-import com.example.hackforher.Posts.Models.PostRequest;
-import com.example.hackforher.Posts.Models.ReplyRequest;
+import com.example.hackforher.Posts.DTO.PostRequest;
+import com.example.hackforher.Posts.DTO.ReplyRequest;
 import com.example.hackforher.User.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

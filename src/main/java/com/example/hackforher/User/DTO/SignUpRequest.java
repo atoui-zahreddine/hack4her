@@ -1,4 +1,4 @@
-package com.example.hackforher.User.Models;
+package com.example.hackforher.User.DTO;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

@@ -1,7 +1,7 @@
 package com.example.hackforher.Auth;
 
-import com.example.hackforher.User.Models.SignInRequest;
-import com.example.hackforher.User.Models.SignUpRequest;
+import com.example.hackforher.User.DTO.SignInRequest;
+import com.example.hackforher.User.DTO.SignUpRequest;
 import com.example.hackforher.User.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

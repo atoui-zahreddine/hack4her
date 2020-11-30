@@ -1,8 +1,8 @@
 package com.example.hackforher.User;
 
 import com.example.hackforher.Exception.*;
-import com.example.hackforher.User.Models.SignInRequest;
-import com.example.hackforher.User.Models.SignUpRequest;
+import com.example.hackforher.User.DTO.SignInRequest;
+import com.example.hackforher.User.DTO.SignUpRequest;
 import com.example.hackforher.Utils.Enums.Status;
 import com.example.hackforher.Utils.JwtUtils.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;

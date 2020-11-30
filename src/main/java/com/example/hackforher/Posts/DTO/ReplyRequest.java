@@ -1,4 +1,4 @@
-package com.example.hackforher.Posts.Models;
+package com.example.hackforher.Posts.DTO;
 
 import lombok.Getter;
 import lombok.Setter;

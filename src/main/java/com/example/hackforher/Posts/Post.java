@@ -1,7 +1,7 @@
 package com.example.hackforher.Posts;
 
 import com.example.hackforher.Posts.LikePost.LikePost;
-import com.example.hackforher.Posts.Models.PostRequest;
+import com.example.hackforher.Posts.DTO.PostRequest;
 import com.example.hackforher.Posts.ReplyPost.ReplyPost;
 import com.example.hackforher.User.User;
 import com.fasterxml.jackson.annotation.JsonFormat;
