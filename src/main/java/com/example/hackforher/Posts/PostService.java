@@ -2,10 +2,11 @@ package com.example.hackforher.Posts;
 
 import com.example.hackforher.Exception.NotFoundException;
 import com.example.hackforher.Exception.ResourceExistException;
-import com.example.hackforher.Posts.LikePost.LikePost;
-import com.example.hackforher.Posts.LikePost.LikePostRepository;
 import com.example.hackforher.Posts.DTO.PostRequest;
 import com.example.hackforher.Posts.DTO.ReplyRequest;
+import com.example.hackforher.Posts.DTO.UserLikedPostResponse;
+import com.example.hackforher.Posts.LikePost.LikePost;
+import com.example.hackforher.Posts.LikePost.LikePostRepository;
 import com.example.hackforher.Posts.ReplyPost.ReplyPost;
 import com.example.hackforher.Posts.ReplyPost.ReplyPostRepository;
 import com.example.hackforher.User.User;
@@ -13,9 +14,11 @@ import com.example.hackforher.User.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class PostService {
@@ -122,5 +125,13 @@ public class PostService {
 
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
+    public ResponseEntity<?> getLikedPosts() {
+        var user=(User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        var likedPosts=postRepository.getUserLikedPosts(user.getId())
+                .stream()
+                .map((p)-> new UserLikedPostResponse(p.getId(),p.getTitle(),p.getDescription(),p.isAnonymous(),p.getNumberOfLikes(),p.getPostReplys()))
+                .collect(Collectors.toList());
 
+        return new ResponseEntity<>(likedPosts,HttpStatus.OK);
+    }
 }

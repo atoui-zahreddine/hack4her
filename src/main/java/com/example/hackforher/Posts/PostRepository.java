@@ -35,4 +35,8 @@ public interface PostRepository extends JpaRepository<Post, UUID> {
     @Transactional
     @Modifying
     void addFavoritePost(@Param("userId") String userId, @Param("postId") String postId);
+
+    @Query("select p from Post p where p.user.id=:userId ")
+    @EntityGraph(attributePaths = {"user","postReplys","usersLikes"})
+    List<Post> getUserLikedPosts(@Param("userId") UUID userId);
 }

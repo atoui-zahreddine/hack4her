@@ -71,8 +71,13 @@ public class PostController {
                                        @AuthenticationPrincipal User user,
                                        @Valid @RequestBody ReplyRequest replyRequest
                                        )
-    { return postService.addReply(UUID.fromString(id),replyRequest,user);
+    {
+        return postService.addReply(UUID.fromString(id),replyRequest,user);
     }
 
+    @GetMapping("/likes/me")
+    public ResponseEntity<?> getUserLikedPosts(){
+        return postService.getLikedPosts();
+    }
 
 }
