@@ -75,7 +75,9 @@ public class PostService {
     public ResponseEntity<?> addFavoritePost(UUID postId, User user) {
         var post =postRepository.findById(postId).
                 orElseThrow(() -> new NotFoundException(HttpStatus.NOT_FOUND.value(), " no post with this id"));
-        var alreadyAdded=user.getFavoritePosts().stream().anyMatch(p->p.getId().equals(postId));
+        var alreadyAdded=user.getFavoritePosts()
+                .stream()
+                .anyMatch(p->p.getId().equals(postId));
         if(alreadyAdded)
             throw new ResourceExistException(HttpStatus.CONFLICT.value(), "already added to favorites");
         post.getUsersFavoritePosts().add(user);

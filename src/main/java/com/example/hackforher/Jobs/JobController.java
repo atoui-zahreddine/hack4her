@@ -22,6 +22,7 @@ public class JobController {
     public ResponseEntity<?> createJob(@Valid @RequestBody Job request,@AuthenticationPrincipal User user){
         return jobService.createJob(request,user);
     }
+
     @GetMapping("")
     public ResponseEntity<?> getAllJobs(){
         return jobService.getAllJobs();
